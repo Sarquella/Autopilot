@@ -16,7 +16,7 @@ class DestinationTests: XCTestCase {
         let model = Int.self
         let destination = Destination(model) { EmptyView() }
         
-        XCTAssertTrue(model == destination.model)
+        XCTAssert(model == destination.model)
     }
     
     func test_initWithContent_withoutParam_returnsCorrectContent() {
