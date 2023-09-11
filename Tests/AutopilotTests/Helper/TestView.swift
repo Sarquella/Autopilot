@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct TestView<Parameter>: View {
-    let id: UUID = UUID()
     let parameter: Parameter
     
     init(parameter: Parameter) {
         self.parameter = parameter
     }
     
-    init() where Parameter == Any? {
-        self.parameter = nil
+    init() where Parameter == String? {
+        self.init(parameter: nil)
     }
     
     var body: some View {
@@ -24,8 +23,8 @@ struct TestView<Parameter>: View {
     }
 }
 
-extension TestView: Equatable {
+extension TestView: Equatable where Parameter: Equatable {
     static func == (lhs: TestView<Parameter>, rhs: TestView<Parameter>) -> Bool {
-        lhs.id == rhs.id
+        lhs.parameter == rhs.parameter
     }
 }
