@@ -1,0 +1,20 @@
+name: ⚙️ Build
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-13
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: 🔨 Xcode version
+        run: |
+          xcodebuild -version
+      - name: ⚙️ Build
+        run: |
+           xcodebuild -scheme Autopilot -destination 'platform=macOS,name=Any Mac'
