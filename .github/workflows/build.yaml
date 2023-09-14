@@ -15,6 +15,19 @@ jobs:
       - name: 🔨 Xcode version
         run: |
           xcodebuild -version
+      - name: 📦 SPM Cache
+        uses: actions/cache@v3
+        with:
+          path: .spm-cache
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
       - name: ⚙️ Build
         run: |
-           xcodebuild -scheme Autopilot -destination 'platform=macOS,name=Any Mac'
+          xcodebuild build \
+          -scheme Autopilot \
+          -clonedSourcePackagesDirPath '.spm-cache' \
+          -disableAutomaticPackageResolution \
+          -onlyUsePackageVersionsFromResolvedFile \
+          -skipPackageUpdates \
+          -destination 'platform=macOS,name=Any Mac'
