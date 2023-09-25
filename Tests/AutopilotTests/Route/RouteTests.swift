@@ -14,7 +14,7 @@ class RouteTests: XCTestCase {
         let style: Route.Style = .sheet
         let route = Route(model: model, style: style)
         
-        XCTAssert(route.model as? Int == model)
-        XCTAssert(route.style == style)
+        XCTAssertEqual(route.model as? Int, model)
+        XCTAssertEqual(route.style, style)
     }
 }
