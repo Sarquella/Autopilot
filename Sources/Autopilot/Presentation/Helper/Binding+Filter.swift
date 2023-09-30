@@ -22,7 +22,7 @@ extension Binding where Value == Route? {
         )
     }
     
-    func filter<Destination: Destinable>(by destination: Destination) -> Binding<Value> {
+    func filter<D: Destination>(by destination: D) -> Binding<Value> {
         .init(
             get: {
                 wrappedValue.flatMap { route in

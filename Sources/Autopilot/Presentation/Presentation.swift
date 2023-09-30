@@ -7,27 +7,27 @@
 
 import SwiftUI
 
-protocol Presentation<Destination> {
+protocol Presentation<Presentable> {
     associatedtype Body: View
-    associatedtype Destination: Destinable
+    associatedtype Presentable: Destination
     typealias Root = _PresentationModifier<Self>.Content
     
     @ViewBuilder @MainActor func body(
         root: Self.Root,
         route: Binding<Route?>,
-        destination: Self.Destination
+        destination: Self.Presentable
     ) -> Self.Body
 }
 
 struct _PresentationModifier<P: Presentation>: ViewModifier {
     let presentation: P
-    let destination: P.Destination
+    let destination: P.Presentable
     
     @EnvironmentObject private var router: Router
     
     fileprivate init(
         presentation: P,
-        destination: P.Destination
+        destination: P.Presentable
     ) {
         self.presentation = presentation
         self.destination = destination

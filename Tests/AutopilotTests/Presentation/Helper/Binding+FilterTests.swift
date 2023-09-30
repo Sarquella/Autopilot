@@ -10,7 +10,7 @@ import XCTest
 import SwiftUI
 
 class BindingFilterTests: XCTestCase {
-    let destination = TestDestinable(
+    let destination = TestDestination(
         Int.self,
         transform: { $0 as? Int }
     )
