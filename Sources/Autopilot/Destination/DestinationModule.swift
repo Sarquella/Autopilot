@@ -6,8 +6,7 @@
 //
 
 public protocol DestinationModule {
-    typealias Destinations = Destinable
-    associatedtype Graph: Destinations
+    associatedtype Destinations: Autopilot.Destination
     typealias Destination = _Destination
-    @DestinationBuilder var destinations: Self.Graph { get }
+    @DestinationBuilder var destinations: Self.Destinations { get }
 }

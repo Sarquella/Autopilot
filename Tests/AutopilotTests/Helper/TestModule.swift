@@ -15,8 +15,8 @@ struct TestModule<Model>: DestinationModule {
         self.id = id
     }
     
-    var destinations: some Destinable {
-        TestDestinable(Model.self, id: id)
+    var destinations: some Destination {
+        TestDestination(Model.self, id: id)
     }
 }
 

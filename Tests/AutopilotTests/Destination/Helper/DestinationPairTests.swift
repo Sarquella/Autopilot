@@ -12,8 +12,8 @@ import ViewInspector
 
 class DestinationPairTests: XCTestCase {
     func test_initWithDestinations_returnsCorrectDestinations() {
-        let first = TestDestinable(Int.self)
-        let second = TestDestinable(String.self)
+        let first = TestDestination(Int.self)
+        let second = TestDestination(String.self)
         let pair = DestinationPair(first: first, second: second)
         
         XCTAssertEqual(pair.first, first)
@@ -21,8 +21,8 @@ class DestinationPairTests: XCTestCase {
     }
     
     func test_transformWithFirstModel_returnsCorrectModel() {
-        let first = TestDestinable(Int.self)
-        let second = TestDestinable(String.self)
+        let first = TestDestination(Int.self)
+        let second = TestDestination(String.self)
         let pair = DestinationPair(first: first, second: second)
         
         let firstModel = 0
@@ -33,8 +33,8 @@ class DestinationPairTests: XCTestCase {
     }
     
     func test_transformWithSecondModel_returnsCorrectModel() {
-        let first = TestDestinable(Int.self)
-        let second = TestDestinable(String.self)
+        let first = TestDestination(Int.self)
+        let second = TestDestination(String.self)
         let pair = DestinationPair(first: first, second: second)
         
         let secondModel = "model"
@@ -45,8 +45,8 @@ class DestinationPairTests: XCTestCase {
     }
     
     func test_transformWithInvalidModel_returnsNil() {
-        let first = TestDestinable(Int.self)
-        let second = TestDestinable(String.self)
+        let first = TestDestination(Int.self)
+        let second = TestDestination(String.self)
         let pair = DestinationPair(first: first, second: second)
         
         let model = pair.transform(model: true)
@@ -55,8 +55,8 @@ class DestinationPairTests: XCTestCase {
     }
     
     func test_bodyWithFirstModel_returnsFirstBody() throws {
-        let first = TestDestinable(Int.self, body: TestView.init)
-        let second = TestDestinable(String.self, body: TestView.init)
+        let first = TestDestination(Int.self, body: TestView.init)
+        let second = TestDestination(String.self, body: TestView.init)
         let pair = DestinationPair(first: first, second: second)
         
         let model = 0
@@ -70,8 +70,8 @@ class DestinationPairTests: XCTestCase {
     }
     
     func test_bodyWithSecondModel_returnsSecondBody() throws {
-        let first = TestDestinable(Int.self, body: TestView.init)
-        let second = TestDestinable(String.self, body: TestView.init)
+        let first = TestDestination(Int.self, body: TestView.init)
+        let second = TestDestination(String.self, body: TestView.init)
         let pair = DestinationPair(first: first, second: second)
         
         let model = "model"
@@ -85,8 +85,8 @@ class DestinationPairTests: XCTestCase {
     }
     
     func test_bodyWithInvalidModel_returnsInvalidDestination() throws {
-        let first = TestDestinable(Int.self, body: TestView.init)
-        let second = TestDestinable(String.self, body: TestView.init)
+        let first = TestDestination(Int.self, body: TestView.init)
+        let second = TestDestination(String.self, body: TestView.init)
         let pair = DestinationPair(first: first, second: second)
         
         let body = pair.body(for: .init(first: nil, second: nil))

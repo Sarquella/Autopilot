@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct DestinationPair<D0: Destinable, D1: Destinable> {
+struct DestinationPair<D0: Destination, D1: Destination> {
     let first: D0
     let second: D1
 }
 
-extension DestinationPair: Destinable {
+extension DestinationPair: Destination {
     func transform(model: Any) -> Model? {
         if let firstModel = model as? D0.Model {
             return .init(first: firstModel, second: nil)

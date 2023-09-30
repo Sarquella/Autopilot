@@ -1,5 +1,5 @@
 //
-//  TestDestinable.swift
+//  TestDestination.swift
 //  
 //
 //  Created by Adrià Sarquella Farrés on 11/9/23.
@@ -8,7 +8,7 @@
 import Autopilot
 import SwiftUI
 
-struct TestDestinable<Model, Body: View>: Destinable {
+struct TestDestination<Model, Body: View>: Destination {
     private let id: String
     private let body: (Model) -> Body
     
@@ -42,8 +42,8 @@ struct TestDestinable<Model, Body: View>: Destinable {
     }
 }
 
-extension TestDestinable: Equatable {
-    static func == (lhs: TestDestinable<Model, Body>, rhs: TestDestinable<Model, Body>) -> Bool {
+extension TestDestination: Equatable {
+    static func == (lhs: TestDestination<Model, Body>, rhs: TestDestination<Model, Body>) -> Bool {
         lhs.id == rhs.id
     }
 }
