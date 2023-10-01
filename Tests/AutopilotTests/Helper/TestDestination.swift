@@ -9,13 +9,13 @@ import Autopilot
 import SwiftUI
 
 struct TestDestination<Model, Body: View>: Destination {
-    private let id: String
+    private let id: TestIdentifier<Self>
     private let transform: (Any) -> Model?
     private let body: (Model) -> Body
     
     init(
         _: Model.Type,
-        id: String = "\(Model.self)",
+        id: TestIdentifier<Self> = .init("\(Model.self)"),
         transform: @escaping (Any) -> Model? = { _ in nil },
         @ViewBuilder body: @escaping (Model) -> Body
     ) {
@@ -26,7 +26,7 @@ struct TestDestination<Model, Body: View>: Destination {
     
     init(
         _ model: Model.Type,
-        id: String = "\(Model.self)",
+        id: TestIdentifier<Self> = .init("\(Model.self)"),
         transform: @escaping (Any) -> Model? = { _ in nil }
     ) where Body == EmptyView {
         self.init(
