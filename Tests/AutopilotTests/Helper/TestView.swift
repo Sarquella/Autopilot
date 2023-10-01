@@ -22,7 +22,7 @@ struct TestView<Parameter>: View {
     
     init(parameter: Parameter) {
         self.init(
-            id: .init("\(Parameter.self)"),
+            id: .init(),
             parameter: parameter
         )
     }
@@ -36,7 +36,7 @@ struct TestView<Parameter>: View {
     
     init() where Parameter == Void {
         self.init(
-            id: .init("\(Parameter.self)"),
+            id: .init(),
             parameter: ()
         )
     }

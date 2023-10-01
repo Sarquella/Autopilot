@@ -11,7 +11,7 @@ import SwiftUI
 struct TestModule<Model>: DestinationModule {
     let id: TestIdentifier<Self>
     
-    init(id: TestIdentifier<Self> = .init("\(Model.self)")) {
+    init(id: TestIdentifier<Self> = .init()) {
         self.id = id
     }
     

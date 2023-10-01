@@ -14,7 +14,7 @@ class DestinationTests: XCTestCase {
     typealias Destination = _Destination
     
     func test_initWithContent_withoutParam_returnsCorrectBody() throws {
-        let content = TestView(id: .init("content"))
+        let content = TestView()
         let destination = Destination(Int.self) {
             content
         }

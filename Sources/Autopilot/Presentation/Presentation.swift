@@ -25,7 +25,7 @@ struct _PresentationModifier<P: Presentation>: ViewModifier {
     
     @EnvironmentObject private var router: Router
     
-    fileprivate init(
+    init(
         presentation: P,
         destination: P.Presentable
     ) {
