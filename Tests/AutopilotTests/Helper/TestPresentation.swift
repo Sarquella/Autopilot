@@ -8,7 +8,7 @@
 @testable import Autopilot
 import SwiftUI
 
-protocol TestPresentation: Presentation, Equatable
+protocol TestPresentation: Presentation, Identifiable, Equatable
 where Body == EmptyView {
     var id: TestIdentifier<Self> { get }
     init(id: TestIdentifier<Self>)

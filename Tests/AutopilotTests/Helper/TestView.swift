@@ -8,7 +8,7 @@
 import SwiftUI
 import XCTest
 
-struct TestView<Parameter>: View {
+struct TestView<Parameter>: View, Identifiable {
     let id: TestIdentifier<Self>
     let parameter: Parameter
     

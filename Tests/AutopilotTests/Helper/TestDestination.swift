@@ -8,17 +8,17 @@
 import Autopilot
 import SwiftUI
 
-struct TestDestination<Model>: Destination {
+struct TestDestination<Model>: Destination, Identifiable {
     typealias Body = TestView<Model>
     
-    private let id: TestIdentifier<Self>
+    let id: TestIdentifier<Self>
     private let transform: (Any) -> Model?
     private let body: (Model) -> Body
     
     init(
         _: Model.Type,
         id: TestIdentifier<Self> = .init(),
-        transform: @escaping (Any) -> Model? = { _ in nil },
+        transform: @escaping (Any) -> Model? = { $0 as? Model },
         @ViewBuilder body: @escaping (Model) -> TestView<Model> = TestView<Model>.init
     ) {
         self.id = id

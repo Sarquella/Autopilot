@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TestIdentifier<Holder>: Equatable {
+struct TestIdentifier<Holder>: Hashable {
     let value: String
     
     init(_ value: String = UUID().uuidString) {

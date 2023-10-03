@@ -29,9 +29,13 @@ class DestinationTests: XCTestCase {
     }
 
     func test_initWithContent_withParam_returnsCorrectBody() throws {
+        let id: TestView<Int>.ID = .init("id")
         let parameter = 0
         let destination = Destination(Int.self) { parameter in
-            TestView(parameter: parameter)
+            TestView(
+                id: id,
+                parameter: parameter
+            )
         }
         
         let body = destination.body(for: parameter)
@@ -40,6 +44,7 @@ class DestinationTests: XCTestCase {
             .view(TestView<Int>.self)
             .actualView()
         
+        XCTAssertEqual(typedBody.id, id)
         XCTAssertEqual(typedBody.parameter, parameter)
     }
     
@@ -84,7 +89,7 @@ class DestinationTests: XCTestCase {
             .view(InvalidDestination.self)
     }
     
-    func test_bodyWithValidModel_returnsInvalidDestination() throws {
+    func test_bodyWithValidModel_returnsDestination() throws {
         let content = TestView()
         let destination = Destination(String.self) {
             content
@@ -92,8 +97,11 @@ class DestinationTests: XCTestCase {
         
         let body = destination.body(for: "model")
         
-        _ = try body
+        let typedBody = try body
             .inspect()
             .view(TestView<Void>.self)
+            .actualView()
+        
+        XCTAssertEqual(typedBody, content)
     }
 }

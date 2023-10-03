@@ -8,7 +8,7 @@
 import Autopilot
 import SwiftUI
 
-struct TestModule<Model>: DestinationModule {
+struct TestModule<Model>: DestinationModule, Identifiable {
     let id: TestIdentifier<Self>
     
     init(id: TestIdentifier<Self> = .init()) {
