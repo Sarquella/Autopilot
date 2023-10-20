@@ -11,13 +11,13 @@ import SwiftUI
 
 class DestinationBuilderTests: XCTestCase {
     func build(
-        @DestinationBuilder destinations: () -> some Destinable
-    ) -> some Destinable {
+        @DestinationBuilder destinations: () -> some Destination
+    ) -> some Destination {
         destinations()
     }
     
     func test_buildWithSingleDestination_returnsCorrectDestination() {
-        typealias D0 = TestDestinable<Int, EmptyView>
+        typealias D0 = TestDestination<Int, EmptyView>
         let first: D0 = .init(Int.self)
         
         let result = build {
@@ -32,8 +32,8 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithTwoDestinations_returnsDestinationPair() {
-        typealias D0 = TestDestinable<Int, EmptyView>
-        typealias D1 = TestDestinable<String, EmptyView>
+        typealias D0 = TestDestination<Int, EmptyView>
+        typealias D1 = TestDestination<String, EmptyView>
         typealias Pair = DestinationPair<D0, D1>
         let first: D0 = .init(Int.self)
         let second: D1 = .init(String.self)
@@ -51,9 +51,9 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithMultipleDestinations_returnsNestedDestinationPairs() {
-        typealias D0 = TestDestinable<Int, EmptyView>
-        typealias D1 = TestDestinable<String, EmptyView>
-        typealias D2 = TestDestinable<Bool, EmptyView>
+        typealias D0 = TestDestination<Int, EmptyView>
+        typealias D1 = TestDestination<String, EmptyView>
+        typealias D2 = TestDestination<Bool, EmptyView>
         typealias InnerPair = DestinationPair<D0, D1>
         typealias OutterPair = DestinationPair<InnerPair, D2>
         let first: D0 = .init(Int.self)
@@ -83,13 +83,13 @@ class DestinationBuilderTests: XCTestCase {
             first
         }
         
-        XCTAssert(result is M0.Graph)
+        XCTAssert(result is M0.Destinations)
     }
     
     func test_buildWithTwoModules_returnsDestinationPair() {
         typealias M0 = TestModule<Int>
         typealias M1 = TestModule<String>
-        typealias Pair = DestinationPair<M0.Graph, M1.Graph>
+        typealias Pair = DestinationPair<M0.Destinations, M1.Destinations>
         let first: M0 = .init()
         let second: M1 = .init()
         
@@ -105,8 +105,8 @@ class DestinationBuilderTests: XCTestCase {
         typealias M0 = TestModule<Int>
         typealias M1 = TestModule<String>
         typealias M2 = TestModule<Bool>
-        typealias InnerPair = DestinationPair<M0.Graph, M1.Graph>
-        typealias OutterPair = DestinationPair<InnerPair, M2.Graph>
+        typealias InnerPair = DestinationPair<M0.Destinations, M1.Destinations>
+        typealias OutterPair = DestinationPair<InnerPair, M2.Destinations>
         let first: M0 = .init()
         let second: M1 = .init()
         let third: M2 = .init()
@@ -121,9 +121,9 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithDestinationAndModule_returnsDestinationPair() {
-        typealias D0 = TestDestinable<Int, EmptyView>
+        typealias D0 = TestDestination<Int, EmptyView>
         typealias M0 = TestModule<String>
-        typealias Pair = DestinationPair<D0, M0.Graph>
+        typealias Pair = DestinationPair<D0, M0.Destinations>
         let destination: D0 = .init(Int.self)
         let module: M0 = .init()
         
@@ -136,13 +136,13 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithMultipleDestinationsAndModules_returnsNestedDestinationPairs() {
-        typealias D0 = TestDestinable<Int, EmptyView>
-        typealias D1 = TestDestinable<String, EmptyView>
+        typealias D0 = TestDestination<Int, EmptyView>
+        typealias D1 = TestDestination<String, EmptyView>
         typealias M0 = TestModule<Bool>
         typealias M1 = TestModule<Double>
-        typealias FirstPair = DestinationPair<D0, M0.Graph>
+        typealias FirstPair = DestinationPair<D0, M0.Destinations>
         typealias SecondPair = DestinationPair<FirstPair, D1>
-        typealias OutterPair = DestinationPair<SecondPair, M1.Graph>
+        typealias OutterPair = DestinationPair<SecondPair, M1.Destinations>
         let firstDestination: D0 = .init(Int.self)
         let secondDestination: D1 = .init(String.self)
         let firstModule: M0 = .init()

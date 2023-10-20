@@ -7,7 +7,12 @@
 
 import SwiftUI
 
-public protocol Destination: Destinable {}
+public protocol Destination {
+    associatedtype Body: View
+    associatedtype Model
+    func transform(model: Any) -> Self.Model?
+    @ViewBuilder func body(for model: Self.Model) -> Self.Body
+}
 
 @available(*, deprecated, renamed: "Destination")
 public struct _Destination<Model, Content: View> {
