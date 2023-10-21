@@ -14,10 +14,22 @@ public protocol Destination {
     @ViewBuilder func body(for model: Self.Model) -> Self.Body
 }
 
+extension Destination {
+    @ViewBuilder
+    func body(for model: Any?) -> some View {
+        if let model,
+           let typedModel = transform(model: model) {
+            body(for: typedModel)
+        } else {
+            InvalidDestination()
+        }
+    }
+}
+
 @available(*, deprecated, renamed: "Destination")
 public struct _Destination<Model, Content: View> {
-    let model: Model.Type
-    let content: (Model) -> Content
+    private let model: Model.Type
+    private let content: (Model) -> Content
         
     public init(
         _ model: Model.Type,

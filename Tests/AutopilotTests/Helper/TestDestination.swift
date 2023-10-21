@@ -8,42 +8,35 @@
 import Autopilot
 import SwiftUI
 
-struct TestDestination<Model, Body: View>: Destination {
-    private let id: String
+struct TestDestination<Model>: Destination, Identifiable {
+    typealias Body = TestView<Model>
+    
+    let id: TestIdentifier<Self>
+    private let transform: (Any) -> Model?
     private let body: (Model) -> Body
     
     init(
         _: Model.Type,
-        id: String = "\(Model.self)",
-        @ViewBuilder body: @escaping (Model) -> Body
+        id: TestIdentifier<Self> = .init(),
+        transform: @escaping (Any) -> Model? = { $0 as? Model },
+        @ViewBuilder body: @escaping (Model) -> TestView<Model> = TestView<Model>.init
     ) {
         self.id = id
+        self.transform = transform
         self.body = body
     }
     
-    init(
-        _ model: Model.Type,
-        id: String = "\(Model.self)"
-    ) where Body == EmptyView {
-        self.init(
-            model,
-            id: id
-        ) { _ in
-            EmptyView()
-        }
-    }
-    
     func transform(model: Any) -> Model? {
-        nil
+        transform(model)
     }
     
-    func body(for model: Model) -> some View {
+    func body(for model: Model) -> TestView<Model> {
         body(model)
     }
 }
 
 extension TestDestination: Equatable {
-    static func == (lhs: TestDestination<Model, Body>, rhs: TestDestination<Model, Body>) -> Bool {
+    static func == (lhs: TestDestination<Model>, rhs: TestDestination<Model>) -> Bool {
         lhs.id == rhs.id
     }
 }

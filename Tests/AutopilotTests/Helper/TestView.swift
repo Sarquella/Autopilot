@@ -6,16 +6,39 @@
 //
 
 import SwiftUI
+import XCTest
 
-struct TestView<Parameter>: View {
+struct TestView<Parameter>: View, Identifiable {
+    let id: TestIdentifier<Self>
     let parameter: Parameter
     
-    init(parameter: Parameter) {
+    init(
+        id: TestIdentifier<Self>,
+        parameter: Parameter
+    ) {
+        self.id = id
         self.parameter = parameter
     }
     
-    init() where Parameter == String? {
-        self.init(parameter: nil)
+    init(parameter: Parameter) {
+        self.init(
+            id: .init(),
+            parameter: parameter
+        )
+    }
+    
+    init(id: TestIdentifier<Self>) where Parameter == Void {
+        self.init(
+            id: id,
+            parameter: ()
+        )
+    }
+    
+    init() where Parameter == Void {
+        self.init(
+            id: .init(),
+            parameter: ()
+        )
     }
     
     var body: some View {
@@ -23,8 +46,15 @@ struct TestView<Parameter>: View {
     }
 }
 
-extension TestView: Equatable where Parameter: Equatable {
+extension TestView: Equatable {
     static func == (lhs: TestView<Parameter>, rhs: TestView<Parameter>) -> Bool {
-        lhs.parameter == rhs.parameter
+        lhs.id == rhs.id
+    }
+    
+    static func == (
+        lhs: TestView<Parameter>,
+        rhs: TestView<Parameter>
+    ) -> Bool where Parameter: Equatable {
+        lhs.id == rhs.id && lhs.parameter == rhs.parameter
     }
 }

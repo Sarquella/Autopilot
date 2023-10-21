@@ -24,7 +24,7 @@ class RouterTests: XCTestCase {
         
         router.route = route
         
-        XCTAssertEqual(router.route?.model as? String, route.model as? String)
+        XCTAssertEqual(router.route?.model as! String, route.model as! String)
         XCTAssertEqual(router.route?.style, route.style)
     }
 }

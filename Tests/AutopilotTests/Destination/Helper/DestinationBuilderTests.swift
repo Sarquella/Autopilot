@@ -17,7 +17,7 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithSingleDestination_returnsCorrectDestination() {
-        typealias D0 = TestDestination<Int, EmptyView>
+        typealias D0 = TestDestination<Int>
         let first: D0 = .init(Int.self)
         
         let result = build {
@@ -32,8 +32,8 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithTwoDestinations_returnsDestinationPair() {
-        typealias D0 = TestDestination<Int, EmptyView>
-        typealias D1 = TestDestination<String, EmptyView>
+        typealias D0 = TestDestination<Int>
+        typealias D1 = TestDestination<String>
         typealias Pair = DestinationPair<D0, D1>
         let first: D0 = .init(Int.self)
         let second: D1 = .init(String.self)
@@ -51,9 +51,9 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithMultipleDestinations_returnsNestedDestinationPairs() {
-        typealias D0 = TestDestination<Int, EmptyView>
-        typealias D1 = TestDestination<String, EmptyView>
-        typealias D2 = TestDestination<Bool, EmptyView>
+        typealias D0 = TestDestination<Int>
+        typealias D1 = TestDestination<String>
+        typealias D2 = TestDestination<Bool>
         typealias InnerPair = DestinationPair<D0, D1>
         typealias OutterPair = DestinationPair<InnerPair, D2>
         let first: D0 = .init(Int.self)
@@ -121,7 +121,7 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithDestinationAndModule_returnsDestinationPair() {
-        typealias D0 = TestDestination<Int, EmptyView>
+        typealias D0 = TestDestination<Int>
         typealias M0 = TestModule<String>
         typealias Pair = DestinationPair<D0, M0.Destinations>
         let destination: D0 = .init(Int.self)
@@ -136,8 +136,8 @@ class DestinationBuilderTests: XCTestCase {
     }
     
     func test_buildWithMultipleDestinationsAndModules_returnsNestedDestinationPairs() {
-        typealias D0 = TestDestination<Int, EmptyView>
-        typealias D1 = TestDestination<String, EmptyView>
+        typealias D0 = TestDestination<Int>
+        typealias D1 = TestDestination<String>
         typealias M0 = TestModule<Bool>
         typealias M1 = TestModule<Double>
         typealias FirstPair = DestinationPair<D0, M0.Destinations>

@@ -8,15 +8,15 @@
 import Autopilot
 import SwiftUI
 
-struct TestModule<Model>: DestinationModule {
-    let id: String
+struct TestModule<Model>: DestinationModule, Identifiable {
+    let id: TestIdentifier<Self>
     
-    init(id: String = "\(Model.self)") {
+    init(id: TestIdentifier<Self> = .init()) {
         self.id = id
     }
     
     var destinations: some Destination {
-        TestDestination(Model.self, id: id)
+        TestDestination(Model.self, id: .init(id.value))
     }
 }
 

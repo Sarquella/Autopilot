@@ -8,38 +8,44 @@
 import XCTest
 @testable import Autopilot
 import SwiftUI
+import ViewInspector
 
 class DestinationTests: XCTestCase {
     typealias Destination = _Destination
     
-    func test_initWithModel_returnsCorrectModel() {
-        let model = Int.self
-        let destination = Destination(model) { EmptyView() }
-        
-        XCTAssert(model == destination.model)
-    }
-    
-    func test_initWithContent_withoutParam_returnsCorrectContent() {
-        let expectedContent = TestView()
+    func test_initWithContent_withoutParam_returnsCorrectBody() throws {
+        let content = TestView()
         let destination = Destination(Int.self) {
-            expectedContent
+            content
         }
         
-        let content = destination.content(0)
+        let body = destination.body(for: 0)
+        let typedBody = try body
+            .inspect()
+            .view(TestView<Void>.self)
+            .actualView()
         
-        XCTAssertEqual(content, expectedContent)
-        XCTAssertNil(content.parameter)
+        XCTAssertEqual(typedBody, content)
     }
 
-    func test_initWithContent_withParam_returnsCorrectContent() {
+    func test_initWithContent_withParam_returnsCorrectBody() throws {
+        let id: TestView<Int>.ID = .init("id")
         let parameter = 0
         let destination = Destination(Int.self) { parameter in
-            TestView(parameter: parameter)
+            TestView(
+                id: id,
+                parameter: parameter
+            )
         }
         
-        let content = destination.content(parameter)
+        let body = destination.body(for: parameter)
+        let typedBody = try body
+            .inspect()
+            .view(TestView<Int>.self)
+            .actualView()
         
-        XCTAssertEqual(content.parameter, parameter)
+        XCTAssertEqual(typedBody.id, id)
+        XCTAssertEqual(typedBody.parameter, parameter)
     }
     
     func test_transformWithInvalidModel_returnsNil() {
@@ -59,16 +65,43 @@ class DestinationTests: XCTestCase {
         XCTAssertEqual(model, expectedModel)
     }
     
-    func test_bodyReturnsContent() {
-        let model = "model"
-        let destination = Destination(String.self) { parameter in
-            TestView(parameter: parameter)
+    func test_bodyWithNilModel_returnsInvalidDestination() throws {
+        let destination = Destination(String.self) {
+            TestView()
         }
         
-        let body = destination.body(for: model)
-        guard let typedBody = body as? TestView<String> else {
-            return XCTFail("Wrong body type")
+        let body = destination.body(for: nil)
+        
+        _ = try body
+            .inspect()
+            .view(InvalidDestination.self)
+    }
+    
+    func test_bodyWithInvalidModel_returnsInvalidDestination() throws {
+        let destination = Destination(String.self) {
+            TestView()
         }
-        XCTAssertEqual(typedBody.parameter, model)
+        
+        let body = destination.body(for: 0)
+        
+        _ = try body
+            .inspect()
+            .view(InvalidDestination.self)
+    }
+    
+    func test_bodyWithValidModel_returnsDestination() throws {
+        let content = TestView()
+        let destination = Destination(String.self) {
+            content
+        }
+        
+        let body = destination.body(for: "model")
+        
+        let typedBody = try body
+            .inspect()
+            .view(TestView<Void>.self)
+            .actualView()
+        
+        XCTAssertEqual(typedBody, content)
     }
 }
