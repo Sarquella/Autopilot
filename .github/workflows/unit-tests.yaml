@@ -5,29 +5,32 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
-    name: Unit Tests
-    runs-on: macos-13
+  setup:
+    name: Setup
+    uses: ./.github/workflows/setup.yaml
 
+  unit-tests:
+    name: Unit Tests / ${{ matrix.platform.name }}
+    runs-on: ${{ vars.RUNNER }}
+    needs: setup
+    strategy:
+      matrix:
+        platform: ${{ fromJSON(vars.PLATFORM_MATRIX) }}
     steps:
-      - name: Checkout
+      - name: ⬇️ Checkout
         uses: actions/checkout@v3
-      - name: 🔨 Xcode version
-        run: |
-          xcodebuild -version
-      - name: 📦 SPM Cache
+
+      - name: 💾 SPM Cache
         uses: actions/cache@v3
         with:
-          path: .spm-cache
+          path: ${{ vars.SPM_CACHE_PATH }}
           key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-spm-
+          restore-keys: ${{ runner.os }}-spm-
+
       - name: ✅ Unit Tests
         run: |
           xcodebuild test \
-          -scheme Autopilot \
-          -clonedSourcePackagesDirPath '.spm-cache' \
-          -disableAutomaticPackageResolution \
-          -onlyUsePackageVersionsFromResolvedFile \
-          -skipPackageUpdates \
-          -destination 'platform=macOS,name=Any Mac'
+          -scheme ${{ vars.SCHEME }} \
+          -destination '${{ matrix.platform.destination }}' \
+          -clonedSourcePackagesDirPath '${{ vars.SPM_CACHE_PATH }}' \
+          -skipPackageUpdates
