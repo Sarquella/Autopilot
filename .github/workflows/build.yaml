@@ -5,29 +5,33 @@ on:
     branches: ["main"]
 
 jobs:
+  setup:
+    name: Setup
+    uses: ./.github/workflows/setup.yml
+
   build:
     name: Build
-    runs-on: macos-13
-
+    runs-on: ${{ vars.RUNNER }}
+    needs: setup
     steps:
-      - name: Checkout
+      - name: ⬇️ Checkout
         uses: actions/checkout@v3
+        
       - name: 🔨 Xcode version
         run: |
           xcodebuild -version
-      - name: 📦 SPM Cache
+
+      - name: 💾 SPM Cache
         uses: actions/cache@v3
         with:
-          path: .spm-cache
+          path: ${{ vars.SPM_CACHE_PATH }}
           key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-spm-
+          restore-keys: ${{ runner.os }}-spm-
+
       - name: ⚙️ Build
         run: |
           xcodebuild build \
-          -scheme Autopilot \
-          -clonedSourcePackagesDirPath '.spm-cache' \
-          -disableAutomaticPackageResolution \
-          -onlyUsePackageVersionsFromResolvedFile \
-          -skipPackageUpdates \
-          -destination 'platform=macOS,name=Any Mac'
+          -scheme ${{ vars.SCHEME }} \
+          -destination 'platform=macOS,name=Any Mac' \
+          -clonedSourcePackagesDirPath '${{ vars.SPM_CACHE_PATH }}' \
+          -skipPackageUpdates
