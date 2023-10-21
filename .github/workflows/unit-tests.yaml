@@ -10,9 +10,12 @@ jobs:
     uses: ./.github/workflows/setup.yml
 
   unit-tests:
-    name: Unit Tests
+    name: Unit Tests / ${{ matrix.platform.name }}
     runs-on: ${{ vars.RUNNER }}
     needs: setup
+    strategy:
+      matrix:
+        platform: ${{ fromJSON(vars.PLATFORM_MATRIX) }}
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v3
@@ -28,6 +31,6 @@ jobs:
         run: |
           xcodebuild test \
           -scheme ${{ vars.SCHEME }} \
-          -destination 'platform=macOS,name=Any Mac' \
+          -destination '${{ matrix.platform.destination }}' \
           -clonedSourcePackagesDirPath '${{ vars.SPM_CACHE_PATH }}' \
           -skipPackageUpdates
