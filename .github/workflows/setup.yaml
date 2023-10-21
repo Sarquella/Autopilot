@@ -1,0 +1,38 @@
+name: 🪛 Setup
+
+on:
+  workflow_call:
+
+jobs:
+  xcode-version:
+    name: Xcode Version
+    runs-on: ${{ vars.RUNNER }}
+    steps:
+      - name: 🔨 Xcode Version
+        run: |
+          xcodebuild -version
+
+  spm-cache:
+    name: SPM Cache
+    runs-on: ${{ vars.RUNNER }}
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v3
+
+      - name: 💾 SPM Cache
+        id: spm-cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ vars.SPM_CACHE_PATH }}
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: ${{ runner.os }}-spm-
+
+      - name: 📦 SPM Resolve
+        if: ${{ steps.spm-cache.outputs.cache-hit != 'true' }}
+        run: |
+          xcodebuild build \
+          -scheme ${{ vars.SCHEME }} \
+          -destination 'platform=macOS,name=Any Mac' \
+          -clonedSourcePackagesDirPath '${{ vars.SPM_CACHE_PATH }}' \
+          -resolvePackageDependencies \
+          -onlyUsePackageVersionsFromResolvedFile
