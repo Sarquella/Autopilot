@@ -10,16 +10,15 @@ jobs:
     uses: ./.github/workflows/setup.yml
 
   build:
-    name: Build
+    name: Build / ${{ matrix.platform.name }}
     runs-on: ${{ vars.RUNNER }}
     needs: setup
+    strategy:
+      matrix:
+        platform: ${{ fromJSON(vars.PLATFORM_MATRIX) }}
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v3
-        
-      - name: 🔨 Xcode version
-        run: |
-          xcodebuild -version
 
       - name: 💾 SPM Cache
         uses: actions/cache@v3
@@ -32,6 +31,6 @@ jobs:
         run: |
           xcodebuild build \
           -scheme ${{ vars.SCHEME }} \
-          -destination 'platform=macOS,name=Any Mac' \
+          -destination '${{ matrix.platform.destination }}' \
           -clonedSourcePackagesDirPath '${{ vars.SPM_CACHE_PATH }}' \
           -skipPackageUpdates
