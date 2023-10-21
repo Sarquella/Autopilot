@@ -7,7 +7,7 @@ on:
 jobs:
   setup:
     name: Setup
-    uses: ./.github/workflows/setup.yml
+    uses: ./.github/workflows/setup.yaml
 
   build:
     name: Build / ${{ matrix.platform.name }}
