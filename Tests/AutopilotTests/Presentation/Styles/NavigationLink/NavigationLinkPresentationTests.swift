@@ -8,7 +8,7 @@
 import XCTest
 @testable import Autopilot
 import SwiftUI
-@testable import ViewInspector
+import ViewInspector
 
 class NavigationLinkPresentationTests: XCTestCase {
     func testNavigationLink(
