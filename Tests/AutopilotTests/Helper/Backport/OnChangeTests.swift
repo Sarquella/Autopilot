@@ -16,22 +16,22 @@ class OnChangeTests: XCTestCase {
     
     func launchView(
         onAppear: @escaping (Binding<String>) -> Void = { _ in }
-    ) {
+    ) throws {
         let view = OnChangeView(
             value: initialValue,
             action: { self.updatedValue = $0 },
             onAppear: onAppear
         )
-        ViewHosting.host(view: view)
+        try ViewHosting.host(view: view)
     }
     
-    func test_beforeValueUpdate_actionIsNotCalled() {
-        launchView()
+    func test_beforeValueUpdate_actionIsNotCalled() throws {
+        try launchView()
         XCTAssertNil(updatedValue)
     }
     
-    func test_afterValueUpdate_ifValueDidNotChange_actionIsNotCalled() {
-        launchView {
+    func test_afterValueUpdate_ifValueDidNotChange_actionIsNotCalled() throws {
+        try launchView {
             $0.wrappedValue = self.initialValue
         }
         XCTAssertNil(updatedValue)
@@ -39,7 +39,7 @@ class OnChangeTests: XCTestCase {
     
     func test_afterValueUpdate_ifValueDidChange_actionIsCalled() throws {
         let newValue = "newValue"
-        launchView {
+        try launchView {
             $0.wrappedValue = newValue
         }
         XCTAssertEqual(updatedValue, newValue)

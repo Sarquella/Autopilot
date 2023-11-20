@@ -24,7 +24,7 @@ class PresentationStyleModifierTests: XCTestCase {
         item: String? = nil,
         route: Route? = nil,
         onAppear: @escaping (Binding<String?>) -> Void = { _ in }
-    ) {
+    ) throws {
         router.route = route
         let view = PresentationStyleView(
             item: item,
@@ -32,28 +32,28 @@ class PresentationStyleModifierTests: XCTestCase {
             onDismiss: { self.didDismiss = true },
             onAppear: onAppear
         ).environmentObject(router)
-        ViewHosting.host(view: view)
+        try ViewHosting.host(view: view)
     }
 }
 
 // MARK: Route
 extension PresentationStyleModifierTests {
-    func test_beforeItemUpdate_routerIsNotUpdated() {
-        launchView()
+    func test_beforeItemUpdate_routerIsNotUpdated() throws {
+        try launchView()
         XCTAssertNil(router.route)
     }
     
     func test_afterItemUpdate_ifIsChangedFromNilToNotNil_routerIsUpdatedWithItem() throws {
         let newItem = "newItem"
-        launchView(item: nil) { item in
+        try launchView(item: nil) { item in
             item.wrappedValue = newItem
         }
         XCTAssertEqual(router.route?.model as! String, newItem)
         XCTAssertEqual(router.route?.style, style)
     }
     
-    func test_afterItemUpdate_ifIsChangedFromNotNilToNil_routerIsUpdatedWithNil() {
-        launchView(item: "item") { item in
+    func test_afterItemUpdate_ifIsChangedFromNotNilToNil_routerIsUpdatedWithNil() throws {
+        try launchView(item: "item") { item in
             item.wrappedValue = nil
         }
         XCTAssertNil(router.route)
@@ -62,20 +62,20 @@ extension PresentationStyleModifierTests {
 
 // MARK: Dismiss
 extension PresentationStyleModifierTests {
-    func test_beforeRouteUpdate_onDismissIsNotCalled() {
-        launchView()
+    func test_beforeRouteUpdate_onDismissIsNotCalled() throws {
+        try launchView()
         XCTAssertFalse(didDismiss)
     }
     
-    func test_afterRouteUpdate_ifIsChangedFromNilToNotNil_onDismissIsNotCalled() {
-        launchView(route: nil) { [self] _ in
+    func test_afterRouteUpdate_ifIsChangedFromNilToNotNil_onDismissIsNotCalled() throws {
+        try launchView(route: nil) { [self] _ in
             router.route = .init(model: "model", style: style)
         }
         XCTAssertFalse(didDismiss)
     }
     
-    func test_afterItemUpdate_ifIsChangedFromNotNilToNil_onDismissIsCalled() {
-        launchView(route: .init(model: "model", style: style)) { [self] _ in
+    func test_afterItemUpdate_ifIsChangedFromNotNilToNil_onDismissIsCalled() throws {
+        try launchView(route: .init(model: "model", style: style)) { [self] _ in
             router.route = nil
         }
         XCTAssertTrue(didDismiss)
